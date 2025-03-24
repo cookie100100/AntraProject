@@ -1,5 +1,6 @@
 package org.example.antraproject1.pojo;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.Set;
@@ -11,7 +12,7 @@ public class Teacher {
     private Long tid;
     private String tname;
     @ManyToMany(mappedBy = "teachers")
-    @JsonBackReference
+    @JsonIgnore
     private Set<Student> students;
 
 

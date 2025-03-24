@@ -11,7 +11,6 @@ public class Student {
     private Long sid;
     private String sname;
     @ManyToMany
-    @JsonManagedReference
     @JoinTable(name = "student_teacher",
             joinColumns = @JoinColumn(name = "sid"),
             inverseJoinColumns = @JoinColumn(name="tid")
