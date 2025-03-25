@@ -1,4 +1,4 @@
-package org.example.antraproject1.component;
+package org.example.antraproject1.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
