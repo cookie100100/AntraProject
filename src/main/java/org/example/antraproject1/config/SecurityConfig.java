@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,11 +22,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception{
-        return http.csrf(AbstractHttpConfigurer::disable)
+        return http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth ->auth
                 .requestMatchers("/auth/register","/auth/login").permitAll()
-                .requestMatchers("/student/**").hasAuthority("STUDENT")  // Ensure ROLE_STUDENT is correct
-                .requestMatchers("/teacher/**").hasAuthority("TEACHER")
+                .requestMatchers("/students/**").hasRole("ROLE_STUDENT")  // Ensure ROLE_STUDENT is correct
+                .requestMatchers("/teachers/**").hasRole("ROLE_TEACHER")
                 .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
@@ -45,5 +46,9 @@ public class SecurityConfig {
     @Bean
     public JwtFilter jwtAuthenticationFilter(JwtUtil jwtUtil, UserService userService) {
         return new JwtFilter(jwtUtil, userService);
+    }
+    @Bean
+    GrantedAuthorityDefaults grantedAuthorityDefaults() {
+        return new GrantedAuthorityDefaults(""); // Remove the "ROLE_" prefix
     }
 }
