@@ -26,9 +26,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->auth
                 .antMatchers("/auth/register").permitAll()
                         .antMatchers("/auth/login").permitAll()
-                .antMatchers("/students/**").hasAuthority("ROLE_STUDENT")  // Ensure ROLE_STUDENT is correct
-                .antMatchers("/teachers/**").hasAuthority("ROLE_TEACHER")
-                .anyRequest().authenticated())
+                .antMatchers("/students/**").permitAll()  // Ensure ROLE_STUDENT is correct
+                .antMatchers("/teachers/**").permitAll()
+                        .antMatchers("/eureka/**", "/").permitAll()
+                        .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
