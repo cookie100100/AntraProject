@@ -2,6 +2,7 @@ package org.example.antraproject1.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.example.antraproject1.pojo.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -26,8 +27,8 @@ public class JwtUtil {
     public String extractUsername(String token){
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody().getSubject();
     }
-    public boolean validateToken(String token, UserDetails userDetails){
-        return extractUsername(token).equals(userDetails.getUsername()) && !isTokenExpired(token);
+    public boolean validateToken(String token, UserDetails user){
+        return extractUsername(token).equals(user.getUsername()) && !isTokenExpired(token);
     }
     private boolean isTokenExpired(String token){
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody().getExpiration().before(new Date());

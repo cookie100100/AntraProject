@@ -25,17 +25,18 @@ public class AuthController {
     private JwtUtil jwtUtil;
     @Autowired
     private UserService userService;
-    @PostMapping(value="/login")
+    @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest request){
         try {
+            System.out.println("Authenticating user");
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
             );
             final UserDetails userDetails = userService.loadUserByUsername(request.getUsername());
             System.out.println(userDetails);
             final String token = jwtUtil.generateToken(userDetails);
-            System.out.println(token);
-            return ResponseEntity.ok(new AuthResponse(token));
+            System.out.println("Generated token: " + token);
+            return ResponseEntity.ok(token);
         }catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
             }

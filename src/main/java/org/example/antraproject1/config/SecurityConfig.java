@@ -24,9 +24,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception{
         return http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth ->auth
-                .requestMatchers("/auth/register","/auth/login").permitAll()
-                .requestMatchers("/students/**").hasRole("ROLE_STUDENT")  // Ensure ROLE_STUDENT is correct
-                .requestMatchers("/teachers/**").hasRole("ROLE_TEACHER")
+                .antMatchers("/auth/register").permitAll()
+                        .antMatchers("/auth/login").permitAll()
+                .antMatchers("/students/**").hasAuthority("ROLE_STUDENT")  // Ensure ROLE_STUDENT is correct
+                .antMatchers("/teachers/**").hasAuthority("ROLE_TEACHER")
                 .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

@@ -1,9 +1,10 @@
 package org.example.antraproject1.security;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.example.antraproject1.pojo.User;
 import org.example.antraproject1.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,6 +39,7 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+        System.out.println(response.getStatus());
     }
 
     private String getTokenFromRequest(HttpServletRequest request) {
@@ -54,6 +56,7 @@ public class JwtFilter extends OncePerRequestFilter {
             if (jwtUtil.validateToken(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                System.out.println(userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authToken);
                 System.out.println("User authenticated: " + username);
             } else {

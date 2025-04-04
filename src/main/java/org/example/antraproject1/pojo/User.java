@@ -1,6 +1,12 @@
 package org.example.antraproject1.pojo;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 public class User {
@@ -27,6 +33,7 @@ public class User {
     public void setUsername(String username) {
         this.username = username;
     }
+
 
     public String getPassword() {
         return password;
